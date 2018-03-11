@@ -1,0 +1,59 @@
+﻿@model TIEB.Models.Income
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detay Sayfası</h2>
+
+<div>
+    
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Gelir Türü")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IncomeType1.IncomeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Explanation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Explanation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Persons.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Persons.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Düzenle", "Edit", new { id = Model.IncomeID }) |
+    @Html.ActionLink("Listeye Geri Dön", "Index")
+</p>

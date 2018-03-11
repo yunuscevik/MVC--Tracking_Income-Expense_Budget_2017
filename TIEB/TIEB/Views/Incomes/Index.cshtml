@@ -1,0 +1,195 @@
+﻿@*@model IEnumerable<TIEB.Models.Income>*@
+@model PagedList.IPagedList<TIEB.Models.Income>
+@using TIEB.Models;
+@using PagedList.Mvc;
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>GELİRLERİM</h2>
+<head>
+    <style type="text/css">
+        .column {
+            float: left;
+            width: 250px;
+            
+        }
+    </style>
+</head>
+
+<p>
+    @Html.ActionLink("Gelir Ekle", "Create")
+</p>
+
+<div class="form-group pull-right">
+
+    @Html.Label("Arama Kriteri", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownList("searchType", new List<SelectListItem>
+                {
+                    new SelectListItem{ Text="Gelir Türüne Göre Arama", Value="IncomeNameSearch"},
+                    new SelectListItem{ Text="Miktara Göre Arama", Value="AmountSearch"},
+                    new SelectListItem{ Text="Tarihe Göre Arama", Value="DateSearch"},
+                    new SelectListItem{ Text="Diğer Gelir Türüne Göre Arama", Value="OtherIncomeNameSearch"}
+                }, "--- Seçiniz ---", new { @class = "form-control" })
+        @Html.ValidationMessage("searchType", "", new { @class = "text-danger" })
+    </div>
+</div>
+<br /><br /><br />
+<p class="pull-left column">
+    @Html.ActionLink("Listeyi Yenile", "Index")
+</p>
+<p class="column">
+    Toplam : @ViewBag.TOTAL
+</p>
+
+
+@using (Html.BeginForm())
+{
+
+    <div class="pull-right" id="form-search1" hidden>
+        <b>Gelir Türüne Göre Arama Yap:</b>
+        @Html.TextBox("SearchString1", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Arama Yap" id="search" />
+    </div>
+    <div class="pull-right" id="form-search2" hidden>
+        <b>Diğer Gelir Türüne Göre Arama Yap:</b>
+        @Html.TextBox("SearchString2", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Arama Yap" id="search" />
+    </div>
+    <div class="pull-right" id="form-between-date" hidden>
+        <b>İki Tarih Arası Arama:</b>
+        @Html.TextBox("date1", ViewBag.CurrentFilter1 as string)
+        @Html.TextBox("date2", ViewBag.CurrentFilter2 as string)
+        <input type="submit" value="Arama Yap" id="search" />
+    </div>
+    <div class="pull-right" id="form-between-amount" hidden>
+        <b>Miktarlar Arası Arama:</b>
+        @Html.TextBox("amount1", ViewBag.CurrentFilter1 as string)
+        @Html.TextBox("amount2", ViewBag.CurrentFilter2 as string)
+        <input type="submit" value="Arama Yap" id="search" />
+    </div>
+}
+<br /><br /><br />
+
+
+
+@using (Html.BeginForm("Index", "Incomes", FormMethod.Post))
+{
+    <table class="table" style="text-align:center">
+        <tr>
+            <th style="text-align:center">
+                @Html.ActionLink("Gelir Türü", "Index", new { Sorting_Order = ViewBag.SortingIncomeName, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th style="text-align:center">
+                @Html.ActionLink("Miktar", "Index", new { Sorting_Order = ViewBag.SortingAmount, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+            </th>
+            <th style="text-align:center">
+                @Html.ActionLink("Tarih", "Index", new { Sorting_Order = ViewBag.SortingDate, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+            </th>
+            <th style="text-align:center">
+                @Html.ActionLink("Diğer Gelir Türü", "Index", new { Sorting_Order = ViewBag.SortingExplanation, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th></th>
+        </tr>
+        @{
+            var name = Session["UserName"] as Persons;
+            if (name == null){return;}
+        }
+        
+
+        @foreach (var item in Model.Where(x => x.PersonID == name.PersonID))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IncomeType1.IncomeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Explanation)
+                </td>
+                <td>
+                    @Html.ActionLink("Düzenle", "Edit", new { id = item.IncomeID }) |
+                    @Html.ActionLink("Detay", "Details", new { id = item.IncomeID }) |
+                    @Html.ActionLink("Sil", "Delete", new { id = item.IncomeID })
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+<br /><br />
+@(Html.Raw(ViewBag.HtmlStr)) sonuç
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 }))
+
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#form-search").hide();
+            $("#form-between-date").hide();
+            $("#form-between-amount").hide();
+            $("#searchType").change(function () {
+                    var value = $(this).val();
+                    $.ajax({
+                        url: '/Incomes/SearchType',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { 'value': value },
+                        success: function (data) {
+
+                            if (data.Message == "AppearIncomeName")
+                            {
+                                $("#form-search1").show();
+                                $("#form-search2").hide();
+                                $("#form-between-date").hide();
+                                $("#form-between-amount").hide();
+
+
+                            }
+                            else if (data.Message == "AppearAmount")
+                            {
+                                $("#form-search1").hide();
+                                $("#form-search2").hide();
+                                $("#form-between-date").hide();
+                                $("#form-between-amount").show();
+
+                            }
+                            else if (data.Message == "AppearDate")
+                            {
+                                $("#form-search1").hide();
+                                $("#form-search2").hide();
+                                $("#form-between-date").show();
+                                $("#form-between-amount").hide();
+
+                            }
+                            else if (data.Message == "AppearOtherIncomeName") {
+                                $("#form-search1").hide();
+                                $("#form-search2").show();
+                                $("#form-between-date").hide();
+                                $("#form-between-amount").hide();
+
+
+                            }
+                        }
+
+                    });
+                });
+            });
+    </script>
+}

@@ -1,0 +1,135 @@
+﻿@model TIEB.Models.Income
+@using TIEB.Models;
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Düzenleme Sayfası</h2>
+<head>
+    @*div bloklarını yan yana koymak için css*@
+    <style type="text/css">
+        .column {
+            float: left;
+            width: 560px;
+        }
+    </style>
+</head>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal column" id="form-EditList">
+        <h4>Gelir Düzenleme Sayfası</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @{
+            var name = Session["UserName"] as Persons;
+            if (name == null) { return; } @*Kullanıcı girşi ile Sessiona kaydedilen kullanıcı adı kontrolü boş mu dolu mu?*@
+        }
+        @Html.HiddenFor(model => model.IncomeID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PersonID, "PersonID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("PersonID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PersonID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IncomeType, "IncomeType", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("IncomeType", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IncomeType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Değiştir" class="btn btn-default" />
+            </div>
+        </div>
+        <div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    </div>
+    <div class="form-horizontal column" id="form-ExpTextBox" hidden>
+        <h4>Listede Olmayan Gelir Türü Giriniz</h4>
+        <hr />
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Explanation, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Explanation, "", new { @class = "text-danger" })
+        </div>
+    </div>
+}
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#IncomeType").text(function () { // IncomeType nesnesi sayfa açıldığında texti doluysa 
+                var id = $(this).val();
+                $.ajax({
+                    url: '/Incomes/IncomeTypeOther',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { 'id': id }, // IncomeType Methodunun parametresine id değeri Json olarak gönderilir
+                    success: function (data) {
+                        // Json olarak geri dönen değer başarılıysa if yapısıyla kontrol edilir
+                        // Hangi nesnelerin görünüp görünmeyeceği belirlenir
+                        if (data.Message == "AppearTextBox") {
+                            $("#form-ExpTextBox").show();
+                        }
+                        else {
+                            $("#form-ExpTextBox").hide();
+                            $('input#Explanation').val('');
+                        }
+
+                    }
+                });
+            });
+
+            /********************************************************************************************************/
+
+            $("#IncomeType").change(function () { // IncomeType nesnesi seçildiğinde
+                var id = $(this).val();
+                $.ajax({
+                    url: '/Incomes/IncomeTypeOther',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { 'id': id }, // IncomeType Methodunun parametresine id değeri Json olarak gönderilir
+                    success: function (data) {
+                        // Json olarak geri dönen değer başarılıysa if yapısıyla kontrol edilir
+                        // Hangi nesnelerin görünüp görünmeyeceği belirlenir
+                        if (data.Message == "AppearTextBox") {
+                            $("#form-ExpTextBox").show();
+                        }
+                        else {
+                            $("#form-ExpTextBox").hide();
+                            $('input#Explanation').val('');
+                        }
+
+                    }
+                });
+            });
+        });
+    </script>
+}
+

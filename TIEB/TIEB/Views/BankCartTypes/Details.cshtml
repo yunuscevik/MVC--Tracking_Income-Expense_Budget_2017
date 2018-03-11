@@ -1,0 +1,35 @@
+﻿@model TIEB.Models.BankCartType
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detay Sayfası</h2>
+
+<div>
+    
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BankCartName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BankCartName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Persons.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Persons.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Düzenle", "Edit", new { id = Model.BankCartID }) |
+    @Html.ActionLink("Banka Listeme Geri Dön", "Index")
+</p>

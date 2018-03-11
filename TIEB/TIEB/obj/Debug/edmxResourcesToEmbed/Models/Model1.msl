@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="TIEB_BudgetDBModelStoreContainer" CdmEntityContainer="TIEB_BudgetDBEntities">
+    <EntitySetMapping Name="BankCartType">
+      <EntityTypeMapping TypeName="TIEB_BudgetDBModel.BankCartType">
+        <MappingFragment StoreEntitySet="BankCartType">
+          <ScalarProperty Name="BankCartID" ColumnName="BankCartID" />
+          <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+          <ScalarProperty Name="BankCartName" ColumnName="BankCartName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CreditCartType">
+      <EntityTypeMapping TypeName="TIEB_BudgetDBModel.CreditCartType">
+        <MappingFragment StoreEntitySet="CreditCartType">
+          <ScalarProperty Name="CreditCartID" ColumnName="CreditCartID" />
+          <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+          <ScalarProperty Name="CreditCartName" ColumnName="CreditCartName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Expense">
+      <EntityTypeMapping TypeName="TIEB_BudgetDBModel.Expense">
+        <MappingFragment StoreEntitySet="Expense">
+          <ScalarProperty Name="Explanation" ColumnName="Explanation" />
+          <ScalarProperty Name="PaymentInfo" ColumnName="PaymentInfo" />
+          <ScalarProperty Name="InstallmentInfo" ColumnName="InstallmentInfo" />
+          <ScalarProperty Name="ExpenseID" ColumnName="ExpenseID" />
+          <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+          <ScalarProperty Name="ExpenseType" ColumnName="ExpenseType" />
+          <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="BankID" ColumnName="BankID" />
+          <ScalarProperty Name="CreditID" ColumnName="CreditID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ExpenseType">
+      <EntityTypeMapping TypeName="TIEB_BudgetDBModel.ExpenseType">
+        <MappingFragment StoreEntitySet="ExpenseType">
+          <ScalarProperty Name="ExpenseTypeID" ColumnName="ExpenseTypeID" />
+          <ScalarProperty Name="ExpenseName" ColumnName="ExpenseName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Income">
+      <EntityTypeMapping TypeName="TIEB_BudgetDBModel.Income">
+        <MappingFragment StoreEntitySet="Income">
+          <ScalarProperty Name="Explanation" ColumnName="Explanation" />
+          <ScalarProperty Name="IncomeID" ColumnName="IncomeID" />
+          <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+          <ScalarProperty Name="IncomeType" ColumnName="IncomeType" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="IncomeType">
+      <EntityTypeMapping TypeName="TIEB_BudgetDBModel.IncomeType">
+        <MappingFragment StoreEntitySet="IncomeType">
+          <ScalarProperty Name="IncomeTypeID" ColumnName="IncomeTypeID" />
+          <ScalarProperty Name="IncomeName" ColumnName="IncomeName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Persons">
+      <EntityTypeMapping TypeName="TIEB_BudgetDBModel.Persons">
+        <MappingFragment StoreEntitySet="Persons">
+          <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="SurName" ColumnName="SurName" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="BrithDate" ColumnName="BrithDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

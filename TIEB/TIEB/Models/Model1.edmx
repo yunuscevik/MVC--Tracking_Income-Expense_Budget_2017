@@ -1,0 +1,548 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TIEB_BudgetDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BankCartType">
+          <Key>
+            <PropertyRef Name="BankCartID" />
+          </Key>
+          <Property Name="BankCartID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonID" Type="int" />
+          <Property Name="BankCartName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CreditCartType">
+          <Key>
+            <PropertyRef Name="CreditCartID" />
+          </Key>
+          <Property Name="CreditCartID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonID" Type="int" />
+          <Property Name="CreditCartName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Expense">
+          <Key>
+            <PropertyRef Name="ExpenseID" />
+          </Key>
+          <Property Name="ExpenseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonID" Type="int" Nullable="false" />
+          <Property Name="ExpenseType" Type="int" Nullable="false" />
+          <Property Name="PaymentType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Amount" Type="money" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="BankID" Type="int" />
+          <Property Name="CreditID" Type="int" />
+          <Property Name="InstallmentInfo" Type="nvarchar" MaxLength="50" />
+          <Property Name="PaymentInfo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Explanation" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ExpenseType">
+          <Key>
+            <PropertyRef Name="ExpenseTypeID" />
+          </Key>
+          <Property Name="ExpenseTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ExpenseName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Income">
+          <Key>
+            <PropertyRef Name="IncomeID" />
+          </Key>
+          <Property Name="IncomeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonID" Type="int" Nullable="false" />
+          <Property Name="IncomeType" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="money" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Explanation" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="IncomeType">
+          <Key>
+            <PropertyRef Name="IncomeTypeID" />
+          </Key>
+          <Property Name="IncomeTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IncomeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Persons">
+          <Key>
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="PersonID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SurName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="BrithDate" Type="date" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_BankCartType_Persons">
+          <End Role="Persons" Type="Self.Persons" Multiplicity="0..1" />
+          <End Role="BankCartType" Type="Self.BankCartType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persons">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="BankCartType">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CreditCartType_Persons">
+          <End Role="Persons" Type="Self.Persons" Multiplicity="0..1" />
+          <End Role="CreditCartType" Type="Self.CreditCartType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persons">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="CreditCartType">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Expense_BankCartType">
+          <End Role="BankCartType" Type="Self.BankCartType" Multiplicity="0..1" />
+          <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BankCartType">
+              <PropertyRef Name="BankCartID" />
+            </Principal>
+            <Dependent Role="Expense">
+              <PropertyRef Name="BankID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Expense_CreditCartType">
+          <End Role="CreditCartType" Type="Self.CreditCartType" Multiplicity="0..1" />
+          <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CreditCartType">
+              <PropertyRef Name="CreditCartID" />
+            </Principal>
+            <Dependent Role="Expense">
+              <PropertyRef Name="CreditID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Expense_ExpenseType">
+          <End Role="ExpenseType" Type="Self.ExpenseType" Multiplicity="1" />
+          <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExpenseType">
+              <PropertyRef Name="ExpenseTypeID" />
+            </Principal>
+            <Dependent Role="Expense">
+              <PropertyRef Name="ExpenseType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Expense_Persons">
+          <End Role="Persons" Type="Self.Persons" Multiplicity="1" />
+          <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persons">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="Expense">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Income_IncomeType">
+          <End Role="IncomeType" Type="Self.IncomeType" Multiplicity="1" />
+          <End Role="Income" Type="Self.Income" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IncomeType">
+              <PropertyRef Name="IncomeTypeID" />
+            </Principal>
+            <Dependent Role="Income">
+              <PropertyRef Name="IncomeType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Income_Persons">
+          <End Role="Persons" Type="Self.Persons" Multiplicity="1" />
+          <End Role="Income" Type="Self.Income" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persons">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="Income">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TIEB_BudgetDBModelStoreContainer">
+          <EntitySet Name="BankCartType" EntityType="Self.BankCartType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CreditCartType" EntityType="Self.CreditCartType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Expense" EntityType="Self.Expense" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExpenseType" EntityType="Self.ExpenseType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Income" EntityType="Self.Income" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IncomeType" EntityType="Self.IncomeType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Persons" EntityType="Self.Persons" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_BankCartType_Persons" Association="Self.FK_BankCartType_Persons">
+            <End Role="Persons" EntitySet="Persons" />
+            <End Role="BankCartType" EntitySet="BankCartType" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CreditCartType_Persons" Association="Self.FK_CreditCartType_Persons">
+            <End Role="Persons" EntitySet="Persons" />
+            <End Role="CreditCartType" EntitySet="CreditCartType" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Expense_BankCartType" Association="Self.FK_Expense_BankCartType">
+            <End Role="BankCartType" EntitySet="BankCartType" />
+            <End Role="Expense" EntitySet="Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Expense_CreditCartType" Association="Self.FK_Expense_CreditCartType">
+            <End Role="CreditCartType" EntitySet="CreditCartType" />
+            <End Role="Expense" EntitySet="Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Expense_ExpenseType" Association="Self.FK_Expense_ExpenseType">
+            <End Role="ExpenseType" EntitySet="ExpenseType" />
+            <End Role="Expense" EntitySet="Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Expense_Persons" Association="Self.FK_Expense_Persons">
+            <End Role="Persons" EntitySet="Persons" />
+            <End Role="Expense" EntitySet="Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Income_IncomeType" Association="Self.FK_Income_IncomeType">
+            <End Role="IncomeType" EntitySet="IncomeType" />
+            <End Role="Income" EntitySet="Income" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Income_Persons" Association="Self.FK_Income_Persons">
+            <End Role="Persons" EntitySet="Persons" />
+            <End Role="Income" EntitySet="Income" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TIEB_BudgetDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="BankCartType">
+          <Key>
+            <PropertyRef Name="BankCartID" />
+          </Key>
+          <Property Name="BankCartID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonID" Type="Int32" />
+          <Property Name="BankCartName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Persons" Relationship="Self.FK_BankCartType_Persons" FromRole="BankCartType" ToRole="Persons" />
+          <NavigationProperty Name="Expense" Relationship="Self.FK_Expense_BankCartType" FromRole="BankCartType" ToRole="Expense" />
+        </EntityType>
+        <EntityType Name="CreditCartType">
+          <Key>
+            <PropertyRef Name="CreditCartID" />
+          </Key>
+          <Property Name="CreditCartID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonID" Type="Int32" />
+          <Property Name="CreditCartName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Persons" Relationship="Self.FK_CreditCartType_Persons" FromRole="CreditCartType" ToRole="Persons" />
+          <NavigationProperty Name="Expense" Relationship="Self.FK_Expense_CreditCartType" FromRole="CreditCartType" ToRole="Expense" />
+        </EntityType>
+        <EntityType Name="Expense">
+          <Key>
+            <PropertyRef Name="ExpenseID" />
+          </Key>
+          <Property Name="ExpenseID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonID" Type="Int32" Nullable="false" />
+          <Property Name="ExpenseType" Type="Int32" Nullable="false" />
+          <Property Name="PaymentType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="BankID" Type="Int32" />
+          <Property Name="CreditID" Type="Int32" />
+          <NavigationProperty Name="BankCartType" Relationship="Self.FK_Expense_BankCartType" FromRole="Expense" ToRole="BankCartType" />
+          <NavigationProperty Name="CreditCartType" Relationship="Self.FK_Expense_CreditCartType" FromRole="Expense" ToRole="CreditCartType" />
+          <NavigationProperty Name="ExpenseType1" Relationship="Self.FK_Expense_ExpenseType" FromRole="Expense" ToRole="ExpenseType" />
+          <NavigationProperty Name="Persons" Relationship="Self.FK_Expense_Persons" FromRole="Expense" ToRole="Persons" />
+          <Property Name="InstallmentInfo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentInfo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Explanation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ExpenseType">
+          <Key>
+            <PropertyRef Name="ExpenseTypeID" />
+          </Key>
+          <Property Name="ExpenseTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExpenseName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Expense" Relationship="Self.FK_Expense_ExpenseType" FromRole="ExpenseType" ToRole="Expense" />
+        </EntityType>
+        <EntityType Name="Income">
+          <Key>
+            <PropertyRef Name="IncomeID" />
+          </Key>
+          <Property Name="IncomeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonID" Type="Int32" Nullable="false" />
+          <Property Name="IncomeType" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="IncomeType1" Relationship="Self.FK_Income_IncomeType" FromRole="Income" ToRole="IncomeType" />
+          <NavigationProperty Name="Persons" Relationship="Self.FK_Income_Persons" FromRole="Income" ToRole="Persons" />
+          <Property Name="Explanation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="IncomeType">
+          <Key>
+            <PropertyRef Name="IncomeTypeID" />
+          </Key>
+          <Property Name="IncomeTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IncomeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Income" Relationship="Self.FK_Income_IncomeType" FromRole="IncomeType" ToRole="Income" />
+        </EntityType>
+        <EntityType Name="Persons">
+          <Key>
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="PersonID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SurName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BrithDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="BankCartType" Relationship="Self.FK_BankCartType_Persons" FromRole="Persons" ToRole="BankCartType" />
+          <NavigationProperty Name="CreditCartType" Relationship="Self.FK_CreditCartType_Persons" FromRole="Persons" ToRole="CreditCartType" />
+          <NavigationProperty Name="Expense" Relationship="Self.FK_Expense_Persons" FromRole="Persons" ToRole="Expense" />
+          <NavigationProperty Name="Income" Relationship="Self.FK_Income_Persons" FromRole="Persons" ToRole="Income" />
+        </EntityType>
+        <Association Name="FK_BankCartType_Persons">
+          <End Role="Persons" Type="Self.Persons" Multiplicity="0..1" />
+          <End Role="BankCartType" Type="Self.BankCartType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persons">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="BankCartType">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Expense_BankCartType">
+          <End Role="BankCartType" Type="Self.BankCartType" Multiplicity="0..1" />
+          <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BankCartType">
+              <PropertyRef Name="BankCartID" />
+            </Principal>
+            <Dependent Role="Expense">
+              <PropertyRef Name="BankID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CreditCartType_Persons">
+          <End Role="Persons" Type="Self.Persons" Multiplicity="0..1" />
+          <End Role="CreditCartType" Type="Self.CreditCartType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persons">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="CreditCartType">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Expense_CreditCartType">
+          <End Role="CreditCartType" Type="Self.CreditCartType" Multiplicity="0..1" />
+          <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CreditCartType">
+              <PropertyRef Name="CreditCartID" />
+            </Principal>
+            <Dependent Role="Expense">
+              <PropertyRef Name="CreditID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Expense_ExpenseType">
+          <End Role="ExpenseType" Type="Self.ExpenseType" Multiplicity="1" />
+          <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExpenseType">
+              <PropertyRef Name="ExpenseTypeID" />
+            </Principal>
+            <Dependent Role="Expense">
+              <PropertyRef Name="ExpenseType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Expense_Persons">
+          <End Role="Persons" Type="Self.Persons" Multiplicity="1" />
+          <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persons">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="Expense">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Income_IncomeType">
+          <End Role="IncomeType" Type="Self.IncomeType" Multiplicity="1" />
+          <End Role="Income" Type="Self.Income" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IncomeType">
+              <PropertyRef Name="IncomeTypeID" />
+            </Principal>
+            <Dependent Role="Income">
+              <PropertyRef Name="IncomeType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Income_Persons">
+          <End Role="Persons" Type="Self.Persons" Multiplicity="1" />
+          <End Role="Income" Type="Self.Income" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persons">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="Income">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TIEB_BudgetDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BankCartType" EntityType="Self.BankCartType" />
+          <EntitySet Name="CreditCartType" EntityType="Self.CreditCartType" />
+          <EntitySet Name="Expense" EntityType="Self.Expense" />
+          <EntitySet Name="ExpenseType" EntityType="Self.ExpenseType" />
+          <EntitySet Name="Income" EntityType="Self.Income" />
+          <EntitySet Name="IncomeType" EntityType="Self.IncomeType" />
+          <EntitySet Name="Persons" EntityType="Self.Persons" />
+          <AssociationSet Name="FK_BankCartType_Persons" Association="Self.FK_BankCartType_Persons">
+            <End Role="Persons" EntitySet="Persons" />
+            <End Role="BankCartType" EntitySet="BankCartType" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Expense_BankCartType" Association="Self.FK_Expense_BankCartType">
+            <End Role="BankCartType" EntitySet="BankCartType" />
+            <End Role="Expense" EntitySet="Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CreditCartType_Persons" Association="Self.FK_CreditCartType_Persons">
+            <End Role="Persons" EntitySet="Persons" />
+            <End Role="CreditCartType" EntitySet="CreditCartType" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Expense_CreditCartType" Association="Self.FK_Expense_CreditCartType">
+            <End Role="CreditCartType" EntitySet="CreditCartType" />
+            <End Role="Expense" EntitySet="Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Expense_ExpenseType" Association="Self.FK_Expense_ExpenseType">
+            <End Role="ExpenseType" EntitySet="ExpenseType" />
+            <End Role="Expense" EntitySet="Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Expense_Persons" Association="Self.FK_Expense_Persons">
+            <End Role="Persons" EntitySet="Persons" />
+            <End Role="Expense" EntitySet="Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Income_IncomeType" Association="Self.FK_Income_IncomeType">
+            <End Role="IncomeType" EntitySet="IncomeType" />
+            <End Role="Income" EntitySet="Income" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Income_Persons" Association="Self.FK_Income_Persons">
+            <End Role="Persons" EntitySet="Persons" />
+            <End Role="Income" EntitySet="Income" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TIEB_BudgetDBModelStoreContainer" CdmEntityContainer="TIEB_BudgetDBEntities">
+          <EntitySetMapping Name="BankCartType">
+            <EntityTypeMapping TypeName="TIEB_BudgetDBModel.BankCartType">
+              <MappingFragment StoreEntitySet="BankCartType">
+                <ScalarProperty Name="BankCartID" ColumnName="BankCartID" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="BankCartName" ColumnName="BankCartName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CreditCartType">
+            <EntityTypeMapping TypeName="TIEB_BudgetDBModel.CreditCartType">
+              <MappingFragment StoreEntitySet="CreditCartType">
+                <ScalarProperty Name="CreditCartID" ColumnName="CreditCartID" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="CreditCartName" ColumnName="CreditCartName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Expense">
+            <EntityTypeMapping TypeName="TIEB_BudgetDBModel.Expense">
+              <MappingFragment StoreEntitySet="Expense">
+                <ScalarProperty Name="Explanation" ColumnName="Explanation" />
+                <ScalarProperty Name="PaymentInfo" ColumnName="PaymentInfo" />
+                <ScalarProperty Name="InstallmentInfo" ColumnName="InstallmentInfo" />
+                <ScalarProperty Name="ExpenseID" ColumnName="ExpenseID" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="ExpenseType" ColumnName="ExpenseType" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="BankID" ColumnName="BankID" />
+                <ScalarProperty Name="CreditID" ColumnName="CreditID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpenseType">
+            <EntityTypeMapping TypeName="TIEB_BudgetDBModel.ExpenseType">
+              <MappingFragment StoreEntitySet="ExpenseType">
+                <ScalarProperty Name="ExpenseTypeID" ColumnName="ExpenseTypeID" />
+                <ScalarProperty Name="ExpenseName" ColumnName="ExpenseName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Income">
+            <EntityTypeMapping TypeName="TIEB_BudgetDBModel.Income">
+              <MappingFragment StoreEntitySet="Income">
+                <ScalarProperty Name="Explanation" ColumnName="Explanation" />
+                <ScalarProperty Name="IncomeID" ColumnName="IncomeID" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="IncomeType" ColumnName="IncomeType" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IncomeType">
+            <EntityTypeMapping TypeName="TIEB_BudgetDBModel.IncomeType">
+              <MappingFragment StoreEntitySet="IncomeType">
+                <ScalarProperty Name="IncomeTypeID" ColumnName="IncomeTypeID" />
+                <ScalarProperty Name="IncomeName" ColumnName="IncomeName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Persons">
+            <EntityTypeMapping TypeName="TIEB_BudgetDBModel.Persons">
+              <MappingFragment StoreEntitySet="Persons">
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SurName" ColumnName="SurName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="BrithDate" ColumnName="BrithDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

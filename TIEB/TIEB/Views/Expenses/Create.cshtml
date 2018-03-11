@@ -1,0 +1,195 @@
+﻿@model TIEB.Models.Expense
+@using TIEB.Models;
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<head>
+    @*div bloklarını yan yana koymak için css*@
+    <style type="text/css">
+        .column {
+            float:left;
+            width:560px; 
+        }
+    </style>
+</head>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+   
+
+    <div class="form-horizontal column">
+        <h4>Gider Ekleme Sayfası</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @{
+            var name = Session["UserName"] as Persons;
+            if (name == null) { return; } @*Kullanıcı girşi ile Sessiona kaydedilen kullanıcı adı kontrolü boş mu dolu mu?*@
+        }
+        <div class="form-group" hidden>
+            @Html.LabelFor(model => model.PersonID, "PersonID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("PersonID", name.PersonID, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PersonID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ExpenseType, "Harcama Türü", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("ExpenseType", null, "--- Seçiniz ---", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ExpenseType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentType, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("PaymentType", new List<SelectListItem>
+                {
+                    @*PaymentType DropDownListinin içinde seçilecek değerler*@
+                    new SelectListItem{ Text="Nakit", Value="Nakit"},
+                    new SelectListItem{ Text="Kart", Value="Kart"},
+                    new SelectListItem{ Text="Banka", Value="Banka"}
+                }, "--- Seçiniz ---", new { @class = "form-control" })
+                @Html.ValidationMessage("PaymentType", "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Kaydet" class="btn btn-default" />
+                </div>
+            </div>
+            <div>
+                @Html.ActionLink("Listeye Geri Dön", "Index")
+            </div>
+        </div>
+        <div class="form-horizontal column" id="form-ExpTextBox" hidden>
+            <h4>Listede Olmayan Gelir Türü Giriniz</h4>
+            <hr />
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Explanation, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Explanation, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-horizontal column" id="form-payment" hidden>
+            <h4>Ödeme Türü</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group" id="bank-group" hidden>
+                @Html.LabelFor(model => model.BankID, "Banka Adı", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("BankID", null, "--- Seçiniz ---", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.BankID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group" id="credit-group" hidden>
+                @Html.LabelFor(model => model.CreditID, "Kredi Kartı Adı", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("CreditID", null, "--- Seçiniz ---", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CreditID, "", new { @class = "text-danger" })
+                </div>
+                <br /><br /><br />
+                @Html.Label("installment", "Taksit", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("installment",null, "--- Seçiniz ---", new { @class = "form-control" })
+                    @Html.ValidationMessage("installment", "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+}
+
+
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#ExpenseType").change(function () { // ExpenseType nesnesi seçildiğinde 
+                var id = $(this).val();
+                $.ajax({
+                    url: '/Expenses/ExpenseTypeOther',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { 'id': id }, // ExpenseTypeOther Methodunun parametresine id değeri Json olarak gönderilir
+                    success: function (data) {
+                         // Json olarak geri dönen değer başarılıysa if yapısıyla kontrol edilir
+                        // ExpTextBox ın görünüp görünmeyeceği belirlenir
+                        if (data.Message == "AppearTextBox") {
+                            $("#form-ExpTextBox").show();
+                        }
+                        else {
+                            $("#form-ExpTextBox").hide();
+                        }
+
+                    }
+                });
+            });
+            $("#PaymentType").change(function () { // PaymentType nesnesi seçildiğinde
+                var value = $(this).val();
+
+                $.ajax({
+                    url: '/Expenses/PaymentType',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { 'value': value }, // PaymentType Methodunun parametresine value değeri Json olarak gönderilir
+                    success: function (data) {
+                        // Json olarak geri dönen değer başarılıysa if yapısıyla kontrol edilir
+                        // Hangi nesnelerin görünüp görünmeyeceği belirlenir
+                        if (data.Message == "AppearCash") {
+                            $("#form-payment").hide();
+                        }
+                        else if (data.Message == "AppearCard") {
+                            $("#form-payment").show();
+                            $("#bank-group").hide();
+                            $("#credit-group").show();
+                        }
+                        else if (data.Message == "AppearBank") {
+                            $("#form-payment").show();
+                            $("#bank-group").show();
+                            $("#credit-group").hide();
+                        }
+                    }
+
+                });
+
+            });
+            $("#installment").change(function () { // installment nesnesi seçildiğinde
+                var id = $(this).val();
+                $.ajax({
+                    url: '/Expenses/CreateInstallment',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { 'installment': id }, // CreateInstallment Methodunun parametresine id değeri Json olarak gönderilir
+                    success: function (data) {
+                        
+                    }
+                });
+            });
+        });
+    </script>
+}

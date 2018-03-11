@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TIEB_BudgetDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="BankCartType">
+    <Key>
+      <PropertyRef Name="BankCartID" />
+    </Key>
+    <Property Name="BankCartID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PersonID" Type="int" />
+    <Property Name="BankCartName" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CreditCartType">
+    <Key>
+      <PropertyRef Name="CreditCartID" />
+    </Key>
+    <Property Name="CreditCartID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PersonID" Type="int" />
+    <Property Name="CreditCartName" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Expense">
+    <Key>
+      <PropertyRef Name="ExpenseID" />
+    </Key>
+    <Property Name="ExpenseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PersonID" Type="int" Nullable="false" />
+    <Property Name="ExpenseType" Type="int" Nullable="false" />
+    <Property Name="PaymentType" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Amount" Type="money" Nullable="false" />
+    <Property Name="Date" Type="date" Nullable="false" />
+    <Property Name="BankID" Type="int" />
+    <Property Name="CreditID" Type="int" />
+    <Property Name="InstallmentInfo" Type="nvarchar" MaxLength="50" />
+    <Property Name="PaymentInfo" Type="nvarchar" MaxLength="50" />
+    <Property Name="Explanation" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="ExpenseType">
+    <Key>
+      <PropertyRef Name="ExpenseTypeID" />
+    </Key>
+    <Property Name="ExpenseTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ExpenseName" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Income">
+    <Key>
+      <PropertyRef Name="IncomeID" />
+    </Key>
+    <Property Name="IncomeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PersonID" Type="int" Nullable="false" />
+    <Property Name="IncomeType" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="money" Nullable="false" />
+    <Property Name="Date" Type="date" Nullable="false" />
+    <Property Name="Explanation" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="IncomeType">
+    <Key>
+      <PropertyRef Name="IncomeTypeID" />
+    </Key>
+    <Property Name="IncomeTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IncomeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Persons">
+    <Key>
+      <PropertyRef Name="PersonID" />
+    </Key>
+    <Property Name="PersonID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="SurName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Gender" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="BrithDate" Type="date" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_BankCartType_Persons">
+    <End Role="Persons" Type="Self.Persons" Multiplicity="0..1" />
+    <End Role="BankCartType" Type="Self.BankCartType" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persons">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="BankCartType">
+        <PropertyRef Name="PersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CreditCartType_Persons">
+    <End Role="Persons" Type="Self.Persons" Multiplicity="0..1" />
+    <End Role="CreditCartType" Type="Self.CreditCartType" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persons">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="CreditCartType">
+        <PropertyRef Name="PersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Expense_BankCartType">
+    <End Role="BankCartType" Type="Self.BankCartType" Multiplicity="0..1" />
+    <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BankCartType">
+        <PropertyRef Name="BankCartID" />
+      </Principal>
+      <Dependent Role="Expense">
+        <PropertyRef Name="BankID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Expense_CreditCartType">
+    <End Role="CreditCartType" Type="Self.CreditCartType" Multiplicity="0..1" />
+    <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CreditCartType">
+        <PropertyRef Name="CreditCartID" />
+      </Principal>
+      <Dependent Role="Expense">
+        <PropertyRef Name="CreditID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Expense_ExpenseType">
+    <End Role="ExpenseType" Type="Self.ExpenseType" Multiplicity="1" />
+    <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ExpenseType">
+        <PropertyRef Name="ExpenseTypeID" />
+      </Principal>
+      <Dependent Role="Expense">
+        <PropertyRef Name="ExpenseType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Expense_Persons">
+    <End Role="Persons" Type="Self.Persons" Multiplicity="1" />
+    <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persons">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="Expense">
+        <PropertyRef Name="PersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Income_IncomeType">
+    <End Role="IncomeType" Type="Self.IncomeType" Multiplicity="1" />
+    <End Role="Income" Type="Self.Income" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="IncomeType">
+        <PropertyRef Name="IncomeTypeID" />
+      </Principal>
+      <Dependent Role="Income">
+        <PropertyRef Name="IncomeType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Income_Persons">
+    <End Role="Persons" Type="Self.Persons" Multiplicity="1" />
+    <End Role="Income" Type="Self.Income" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persons">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="Income">
+        <PropertyRef Name="PersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="TIEB_BudgetDBModelStoreContainer">
+    <EntitySet Name="BankCartType" EntityType="Self.BankCartType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CreditCartType" EntityType="Self.CreditCartType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Expense" EntityType="Self.Expense" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ExpenseType" EntityType="Self.ExpenseType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Income" EntityType="Self.Income" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="IncomeType" EntityType="Self.IncomeType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Persons" EntityType="Self.Persons" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_BankCartType_Persons" Association="Self.FK_BankCartType_Persons">
+      <End Role="Persons" EntitySet="Persons" />
+      <End Role="BankCartType" EntitySet="BankCartType" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CreditCartType_Persons" Association="Self.FK_CreditCartType_Persons">
+      <End Role="Persons" EntitySet="Persons" />
+      <End Role="CreditCartType" EntitySet="CreditCartType" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Expense_BankCartType" Association="Self.FK_Expense_BankCartType">
+      <End Role="BankCartType" EntitySet="BankCartType" />
+      <End Role="Expense" EntitySet="Expense" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Expense_CreditCartType" Association="Self.FK_Expense_CreditCartType">
+      <End Role="CreditCartType" EntitySet="CreditCartType" />
+      <End Role="Expense" EntitySet="Expense" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Expense_ExpenseType" Association="Self.FK_Expense_ExpenseType">
+      <End Role="ExpenseType" EntitySet="ExpenseType" />
+      <End Role="Expense" EntitySet="Expense" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Expense_Persons" Association="Self.FK_Expense_Persons">
+      <End Role="Persons" EntitySet="Persons" />
+      <End Role="Expense" EntitySet="Expense" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Income_IncomeType" Association="Self.FK_Income_IncomeType">
+      <End Role="IncomeType" EntitySet="IncomeType" />
+      <End Role="Income" EntitySet="Income" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Income_Persons" Association="Self.FK_Income_Persons">
+      <End Role="Persons" EntitySet="Persons" />
+      <End Role="Income" EntitySet="Income" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

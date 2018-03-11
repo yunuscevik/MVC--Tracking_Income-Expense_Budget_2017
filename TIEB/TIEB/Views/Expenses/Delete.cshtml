@@ -1,0 +1,104 @@
+﻿@model TIEB.Models.Expense
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Silme Sayfası</h2>
+
+<h3>Bu Kaydı Silmek İstediğinizden Emin Misiniz?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Harcama Türü")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExpenseType1.ExpenseName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InstallmentInfo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InstallmentInfo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PaymentType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BankCartType.BankCartName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BankCartType.BankCartName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreditCartType.CreditCartName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreditCartType.CreditCartName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentInfo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PaymentInfo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Explanation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Explanation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Persons.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Persons.Name)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Sil" class="btn btn-default" /> |
+            @Html.ActionLink("Listeye Geri Dön", "Index")
+        </div>
+    }
+</div>

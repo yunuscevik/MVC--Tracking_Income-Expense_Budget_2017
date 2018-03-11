@@ -1,0 +1,49 @@
+﻿@model TIEB.Models.CreditCartType
+@using TIEB.Models;
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Kredi Kartı Ekleme Sayfası</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @{
+            var name = Session["UserName"] as Persons;
+            if (name == null){return;} @*Kullanıcı girşi ile Sessiona kaydedilen kullanıcı adı kontrolü boş mu dolu mu?*@
+        }
+        <div class="form-group" hidden>
+            @Html.LabelFor(model => model.PersonID, "PersonID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("PersonID", name.PersonID, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PersonID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CreditCartName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CreditCartName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CreditCartName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Kaydet" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Profilime Geri Dön ", "List", "Persons") |
+    @Html.ActionLink("Tüm Kredi Kartı Listem ", "Index")
+</div>

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<TIEB.Models.CreditCartType>
+@using TIEB.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Kredi Kartlarım</h2>
+
+<p>
+    @Html.ActionLink("Kredi Kartlarım", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CreditCartName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Persons.Name)
+        </th>
+        <th></th>
+    </tr>
+
+@{
+    var name = Session["UserName"] as Persons;
+    if (name == null) { return; }
+}
+@foreach (var item in Model.Where(x => x.PersonID == name.PersonID))
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreditCartName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Persons.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.CreditCartID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.CreditCartID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.CreditCartID })
+        </td>
+    </tr>
+}
+
+</table>
+<br /><br />
+<div>
+    @Html.ActionLink("Profilime Geri Dön ", "List", "Persons")
+</div>

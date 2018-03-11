@@ -1,0 +1,35 @@
+﻿@model TIEB.Models.CreditCartType
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detay Sayfası</h2>
+
+<div>
+    
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CreditCartName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreditCartName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Persons.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Persons.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Düzenle", "Edit", new { id = Model.CreditCartID }) |
+    @Html.ActionLink("Kredi Kartı Listeme Geri Dön", "Index")
+</p>

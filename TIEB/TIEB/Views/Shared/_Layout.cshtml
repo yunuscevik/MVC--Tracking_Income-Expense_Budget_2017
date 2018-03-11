@@ -1,0 +1,76 @@
+﻿@using TIEB.Models;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - BUDGET</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body style="background-color:whitesmoke">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("ANASAYFA", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+            
+                <ul class="nav navbar-nav">
+                    
+                    @if (Session["UserName"] != null)
+                    {
+                        <li>@Html.ActionLink("Gelirlerim", "Index", "Incomes")</li>
+                        <li>@Html.ActionLink("Giderlerim", "Index", "Expenses")</li>
+                    }
+                    
+                </ul>
+                <ul class="nav navbar-nav pull-right">
+                    @if (Session["UserName"] == null)
+                    {
+                        <li>@Html.ActionLink("KAYIT OL", "Create", "Persons")</li>
+                            <li>@Html.ActionLink("GİRİŞ YAP", "Login", "LoginAndLogout")</li>
+                    }
+                    else
+                    {
+                        var name = Session["UserName"] as Persons;
+                        <li style="color:white;"><a href="/Persons/List">HOŞGELDİN @name.Name.ToUpper()</a></li>
+                            <li>@Html.ActionLink("ÇIKIŞ YAP", "Logout", "LoginAndLogout")</li>
+
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+    <div class="navbar navbar-inverse" style="font-size:30px; color:white;">
+        <footer>
+            @{
+                string month = (DateTime.Now.Month).ToString();
+                string day = (DateTime.Now.Day).ToString();
+                if (int.Parse(month) < 10)
+                {
+                    month = "0" + month.ToString();
+                }
+                if (int.Parse(day) < 10)
+                {
+                    day = "0" + day.ToString();
+                }
+            }
+            <p class="pull-left" style="font-size:15px;"><br /><b>TIEB</b>(Tracking Income-Expense Budget)</p>
+            <p class="pull-right"> @day/@month/@DateTime.Now.Year</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
